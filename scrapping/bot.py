@@ -24,7 +24,7 @@ class Bot:
         if self.bot.can_fetch("*", url):
             try:
                 result = urllib.request.urlopen(url)
-                return result.read()
+                return result.read().decode('utf-8')
             except Exception as e:
                 print(str(e))
                 return None
@@ -41,7 +41,7 @@ class Bot:
             self.team_links.append(self.base_url+a_tags['href'])
     
     def read_table(self):
-        for link in self.team_links[-1:-10:-1]:
+        for link in self.team_links[:5]:
             content = self.request(link)
             self._find_filter(content)
     
@@ -55,5 +55,6 @@ class Bot:
             # content = BeautifulSoup(result, 'html.parser')
         # print(type(content))
         df = pd.read_html(str(content))
-        print(df[0].head())
+        print(df[0].head()['Unnamed: 0_level_0']['Player'])
+        # print(df[0].columns)
         

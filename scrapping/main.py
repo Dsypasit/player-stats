@@ -1,4 +1,4 @@
-from scrapping.bot import Bot
+from bot import Bot
 from bs4 import BeautifulSoup
 
 if __name__ == "__main__":
