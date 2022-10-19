@@ -46,15 +46,19 @@ class Bot:
             self._find_filter(content)
     
     def _find_filter(self, content):
-        # //*[@id="content"]/div[2]/div[1]/a
         soup = BeautifulSoup(content, 'html.parser')
         dom = etree.HTML(str(soup))
         l = dom.xpath('//*[@id="content"]/div[2]/div[1]/a/@href')
         if len(l) >0:
             content = self.request(self.base_url+l[0])
-            # content = BeautifulSoup(result, 'html.parser')
-        # print(type(content))
         df = pd.read_html(str(content))
+        team = self._team_name(content)
+        print(team)
         print(df[0].head()['Unnamed: 0_level_0']['Player'])
-        # print(df[0].columns)
+    
+    def _team_name(self, content):
+        soup = BeautifulSoup(content, 'html.parser')
+        raw_text = soup.select_one('#meta > div:nth-child(2) > h1 > span:nth-child(1)').text
+        team = " ".join(raw_text.split()[1:-1])
+        return team
         
